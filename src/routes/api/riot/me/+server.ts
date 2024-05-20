@@ -1,11 +1,11 @@
 import { RIOT_API_KEY } from '$env/static/private';
 import { decodeJwt } from 'jose';
 
-export async function GET({ url, platform }) {
-  const idToken = url.searchParams.get('id_token');
+export async function GET({ request, platform }) {
+  const idToken = request.headers.get('Authorization')?.replace(/^Bearer /, '');
 
-  if (idToken === null) {
-    return new Response('search parameter `id_token` is required', { status: 400 });
+  if (idToken === null || idToken === undefined) {
+    return new Response('', { status: 403 });
   }
 
   const claims = decodeJwt(idToken);
