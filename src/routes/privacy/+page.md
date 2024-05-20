@@ -2,13 +2,10 @@ PRIVACY POLICY
 
 Last updated May 12, 2024
 
-
-
 This privacy notice for Wooseop Kim ("we," "us," or "our"), describes how and why we might collect, store, use, and/or share ("process") your information when you use our services ("Services"), such as when you:
 Visit our website at tier-revealer.by.wooseop.kim, or any website of ours that links to this privacy notice
 Engage with us in other related ways, including any sales, marketing, or events
 Questions or concerns? Reading this privacy notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at termly.8mqho@simplelogin.com.
-
 
 SUMMARY OF KEY POINTS
 
@@ -32,7 +29,6 @@ How do you exercise your rights? The easiest way to exercise your rights is by v
 
 Want to learn more about what we do with any information we collect? Review the privacy notice in full.
 
-
 TABLE OF CONTENTS
 
 1. WHAT INFORMATION DO WE COLLECT?
@@ -47,8 +43,7 @@ TABLE OF CONTENTS
 10. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?
 11. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM YOU?
 
-
-1. WHAT INFORMATION DO WE COLLECT?
+12. WHAT INFORMATION DO WE COLLECT?
 
 Personal information you disclose to us
 
@@ -86,9 +81,6 @@ In Short: We process your information to provide, improve, and administer our Se
 We process your personal information for a variety of reasons, depending on how you interact with our Services, including:
 To facilitate account creation and authentication and otherwise manage user accounts. We may process your information so you can create and log in to your account, as well as keep your account in working order.
 
-
-
-
 To evaluate and improve our Services, products, marketing, and your experience. We may process your information when we believe it is necessary to identify usage trends, determine the effectiveness of our promotional campaigns, and to evaluate and improve our Services, products, marketing, and your experience.
 To identify usage trends. We may process information about how you use our Services to better understand how they are being used so we can improve them.
 
@@ -113,7 +105,7 @@ We may use cookies and similar tracking technologies (like web beacons and pixel
 
 In Short: We keep your information for as long as necessary to fulfill the purposes outlined in this privacy notice unless otherwise required by law.
 
-We will only keep your personal information for as long as it is necessary for the purposes set out in this privacy notice, unless a longer retention period is required or permitted by law (such as tax, accounting, or other legal requirements). No purpose in this notice will require us keeping your personal information for longer than   the period of time in which users have an account with us. 
+We will only keep your personal information for as long as it is necessary for the purposes set out in this privacy notice, unless a longer retention period is required or permitted by law (such as tax, accounting, or other legal requirements). No purpose in this notice will require us keeping your personal information for longer than the period of time in which users have an account with us.
 
 When we have no ongoing legitimate business need to process your personal information, we will either delete or anonymize such information, or, if this is not possible (for example, because your personal information has been stored in backup archives), then we will securely store your personal information and isolate it from any further processing until deletion is possible.
 
@@ -125,7 +117,7 @@ We have implemented appropriate and reasonable technical and organizational secu
 
 7. WHAT ARE YOUR PRIVACY RIGHTS?
 
-In Short:  You may review, change, or terminate your account at any time.
+In Short: You may review, change, or terminate your account at any time.
 
 Withdrawing your consent: If we are relying on your consent to process your personal information, which may be express and/or implied consent depending on the applicable law, you have the right to withdraw your consent at any time. You can withdraw your consent at any time by contacting us by using the contact details provided in the section "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?" below.
 

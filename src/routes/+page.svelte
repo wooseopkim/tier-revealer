@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { PUBLIC_RIOT_SIGN_ON_CLIENT_ID, PUBLIC_RIOT_SIGN_ON_REDIRECT_URI } from "$env/static/public";
-	import { onMount } from "svelte";
+  import {
+    PUBLIC_RIOT_SIGN_ON_CLIENT_ID,
+    PUBLIC_RIOT_SIGN_ON_REDIRECT_URI,
+  } from '$env/static/public';
+  import { onMount } from 'svelte';
+  import idToken from '$lib/store/idToken';
 
   const signOnUrl = new URL('https://auth.riotgames.com');
   signOnUrl.pathname = 'authorize';
@@ -11,23 +15,41 @@
   signOnParams.set('scope', 'openid');
   signOnUrl.search = signOnParams.toString();
 
-  const idToken: Promise<string | null> = new Promise((resolve) => {
-    onMount(() => {
-      const params = new URLSearchParams(location.search);
-      if (params.has('id_token')) {
-        localStorage.setItem('idToken', params.get('id_token')!);
+  let identity: Promise<Record<string, string>> = new Promise(() => {});
+
+  onMount(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.has('id_token')) {
+      localStorage.setItem('idToken', params.get('id_token')!);
+    }
+
+    idToken.set(localStorage.getItem('idToken'));
+  });
+
+  onMount(() => {
+    idToken.subscribe((value) => {
+      if (value === undefined || value === null) {
+        return;
       }
-      resolve(localStorage.getItem('idToken'));
+
+      identity = new Promise(async (resolve) => {
+        const res = await fetch(`/api/riot/me?id_token=${value}`);
+        const json = await res.json();
+        resolve(json);
+      });
     });
   });
 </script>
 
-{#await idToken}
+{#if $idToken === undefined}
   <span>Riot ID 연결 확인 중</span>
-{:then value} 
-  {#if value === null}
-    <a href={signOnUrl.toString()}>Riot ID 연결</a>
-  {:else}
-    <span>Riot ID 연결 완료</span>
-  {/if}
-{/await}
+{:else if $idToken === null}
+  <a href={signOnUrl.toString()}>Riot ID 연결</a>
+{:else}
+  {#await identity}
+    <span>...</span>
+  {:then value}
+    <span>Riot ID: {value.gameName} ({value.tier} {value.rank})</span>
+  {/await}
+{/if}

@@ -1,0 +1,3 @@
+kv_namespaces = [
+    { binding = "KV_NAMESPACE_RIOT_TOKENS", id = "66d349bfa38a43739e16793dc509b860" }
+]
