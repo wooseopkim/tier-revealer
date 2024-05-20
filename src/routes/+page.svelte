@@ -47,13 +47,13 @@
 </script>
 
 {#if $idToken === undefined}
-  <span>Riot ID 연결 확인 중</span>
+  <progress />
 {:else if $idToken === null}
   <a href={signOnUrl.toString()}>Riot ID 연결</a>
 {:else}
   {#await identity}
-    <span>...</span>
+    <progress />
   {:then value}
-    <span>Riot ID: {value.gameName} ({value.tier} {value.rank})</span>
+    <span>{value.gameName} ({value.tier} {value.rank})</span>
   {/await}
 {/if}
