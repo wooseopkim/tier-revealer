@@ -33,12 +33,19 @@
         return;
       }
 
-      identity = new Promise(async (resolve) => {
+      identity = new Promise(async (resolve, reject) => {
         const res = await fetch('/api/riot/me', {
           headers: {
             Authorization: `Bearer ${value}`,
           },
         });
+
+        if (!res.ok) {
+          reject(res.statusText);
+          idToken.set(null);
+          return;
+        }
+
         const json = await res.json();
         resolve(json);
       });

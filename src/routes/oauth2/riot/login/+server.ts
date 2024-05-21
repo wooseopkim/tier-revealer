@@ -1,9 +1,5 @@
-import {
-  PUBLIC_RIOT_SIGN_ON_CLIENT_ID,
-  PUBLIC_RIOT_SIGN_ON_REDIRECT_URI,
-} from '$env/static/public';
-import { RIOT_SIGN_ON_CLIENT_SECRET } from '$env/static/private';
-import { decodeJwt } from 'jose';
+import getOauth2Tokens from '$lib/third_parties/riot/api/getOauth2Tokens.js';
+import putRiotTokens from '$lib/third_parties/cloudflare/kv/putRiotTokens.js';
 
 export async function GET({ url, platform }) {
   const code = url.searchParams.get('code');
@@ -12,17 +8,7 @@ export async function GET({ url, platform }) {
     return new Response('search parameter `code` is required', { status: 400 });
   }
 
-  const body = new URLSearchParams();
-  body.set('grant_type', 'authorization_code');
-  body.set('code', code);
-  body.set('redirect_uri', PUBLIC_RIOT_SIGN_ON_REDIRECT_URI);
-  const res = await fetch('https://auth.riotgames.com/token', {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${btoa(PUBLIC_RIOT_SIGN_ON_CLIENT_ID + ':' + RIOT_SIGN_ON_CLIENT_SECRET)}`,
-    },
-    body: body,
-  });
+  const res = await getOauth2Tokens({ code });
 
   if (!res.ok) {
     return new Response(await res.text(), { status: 500 });
@@ -33,8 +19,10 @@ export async function GET({ url, platform }) {
     id_token: string;
     access_token: string;
   };
-  const claims = decodeJwt(payload.id_token);
-  await platform?.env.KV_NAMESPACE_RIOT_TOKENS.put(claims.sub!, JSON.stringify(payload));
+  await putRiotTokens({
+    namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+    payload,
+  });
 
   const params = new URLSearchParams();
   params.set('id_token', payload.id_token);
