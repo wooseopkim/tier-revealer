@@ -25,7 +25,7 @@ export async function GET({ url, platform }) {
   });
 
   const params = new URLSearchParams();
-  params.set('id_token', payload.id_token);
+  params.set('riot_id_token', payload.id_token);
 
   return new Response('', { status: 307, headers: { Location: `/?${params.toString()}` } });
 }
