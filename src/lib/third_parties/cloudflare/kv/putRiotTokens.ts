@@ -9,5 +9,5 @@ interface Params {
 export default async function putRiotTokens({ namespace, payload }: Params) {
   const { id_token: idToken } = payload;
   const claims = decodeJwt(idToken);
-  await namespace.put(claims.sub!, JSON.stringify(payload));
+  await namespace.put(claims.sub!, JSON.stringify(payload), { expiration: claims.exp });
 }
