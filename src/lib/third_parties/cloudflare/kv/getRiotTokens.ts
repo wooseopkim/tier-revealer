@@ -13,5 +13,8 @@ export default async function getRiotTokens({ namespace, idToken }: Params) {
   const jwk = jwks.find((jwk) => jwk.kid === kid)!;
   const key = await importJWK(jwk, jwk.alg)
   const { payload: claims } = await jwtVerify(idToken, key);
+  if (new Date().valueOf() >= new Date(claims.exp!).valueOf()) {
+    return null;
+  }
   return await namespace.get(claims.sub!);
 }
