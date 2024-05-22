@@ -19,11 +19,9 @@ export async function GET({ request, platform }) {
   const { access_token: accessToken } = JSON.parse(tokens);
 
   const { tier, rank, gameName } = await getMe({ accessToken });
-  return new Response(
-    JSON.stringify({
-      tier,
-      rank,
-      gameName,
-    }),
-  );
+  return Response.json({
+    tier,
+    rank,
+    gameName,
+  });
 }
