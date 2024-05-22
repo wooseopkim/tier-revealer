@@ -1,0 +1,14 @@
+# Riot Sign On ID token has a key length of 1024, which is considered unsafe/invalid by jose.
+
+diff --git a/node_modules/jose/dist/node/esm/runtime/check_key_length.js b/node_modules/jose/dist/node/esm/runtime/check_key_length.js
+index 6d90c03..481648a 100644
+--- a/node_modules/jose/dist/node/esm/runtime/check_key_length.js
++++ b/node_modules/jose/dist/node/esm/runtime/check_key_length.js
+@@ -1,6 +1,2 @@
+-export default (key, alg) => {
+-    const { modulusLength } = key.asymmetricKeyDetails;
+-    if (typeof modulusLength !== 'number' || modulusLength < 2048) {
+-        throw new TypeError(`${alg} requires key modulusLength to be 2048 bits or larger`);
+-    }
++export default () => {
+ };
