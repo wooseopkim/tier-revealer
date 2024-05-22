@@ -1,5 +1,5 @@
 import type { KVNamespace } from '@cloudflare/workers-types/experimental';
-import { decodeJwt } from 'jose';
+import { decodeProtectedHeader, importJWK, jwtVerify, type JWK } from 'jose';
 
 interface Params {
   namespace: KVNamespace;
@@ -7,6 +7,11 @@ interface Params {
 }
 
 export default async function getRiotTokens({ namespace, idToken }: Params) {
-  const claims = decodeJwt(idToken);
+  const res = await fetch('https://auth.riotgames.com/jwks.json');
+  const { keys: jwks }: { keys:JWK[] } = await res.json();
+  const { kid } = decodeProtectedHeader(idToken);
+  const jwk = jwks.find((jwk) => jwk.kid === kid)!;
+  const key = await importJWK(jwk, jwk.alg)
+  const { payload: claims } = await jwtVerify(idToken, key);
   return await namespace.get(claims.sub!);
 }
