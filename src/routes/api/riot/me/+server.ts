@@ -1,4 +1,4 @@
-import getMe from '$lib/api/getMe.js';
+import getMe from '$lib/interactors/riot/getMe.js';
 import getRiotTokens from '$lib/third_parties/cloudflare/kv/getRiotTokens.js';
 
 export async function GET({ request, platform }) {
