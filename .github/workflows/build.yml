@@ -23,6 +23,9 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - run: npm ci
       - run: npm run lint
       - run: npm run build
