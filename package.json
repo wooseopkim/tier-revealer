@@ -52,8 +52,7 @@
   },
   "lint-staged": {
     "**/*.{svelte,ts,js,mjs,cjs}": [
-      "npm run format",
-      "npm run test"
+      "npm run format"
     ],
     "**/*.svelte": [
       "npm run check"
