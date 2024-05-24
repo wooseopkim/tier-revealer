@@ -1,5 +1,18 @@
-import getGuestbookComments from '$lib/third_parties/dcinside/getGuestbookComments';
+export async function load({ request }) {
+  const cookie = request.headers.get('Cookie');
+  if (cookie === null) {
+    return;
+  }
 
-export async function load() {
-  console.log(await getGuestbookComments({ identificationCode: 'fiber3706' }));
+  const riotIdToken = cookie.split('; ')
+    .map((kv) => kv.split('=') as [string, string])
+    .find((([k, _]) => k === 'riot_id_token'))
+    ?.[1];
+  if (riotIdToken === undefined) {
+    return;
+  }
+
+  return {
+    riotIdToken,
+  };
 }

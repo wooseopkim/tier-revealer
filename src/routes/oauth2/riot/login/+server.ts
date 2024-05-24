@@ -1,5 +1,6 @@
 import getOauth2Tokens from '$lib/third_parties/riot/api/getOauth2Tokens.js';
 import putRiotTokens from '$lib/third_parties/cloudflare/kv/putRiotTokens.js';
+import { decodeJwt } from 'jose';
 
 export async function GET({ url, platform }) {
   const code = url.searchParams.get('code');
@@ -24,8 +25,15 @@ export async function GET({ url, platform }) {
     payload,
   });
 
-  const params = new URLSearchParams();
-  params.set('riot_id_token', payload.id_token);
+  const idToken = payload.id_token;
+  const exp = decodeJwt(idToken).exp!
+  const expires = new Date(exp * 1000).toUTCString();
 
-  return new Response('', { status: 307, headers: { Location: `/?${params.toString()}` } });
+  return new Response('', {
+    status: 307,
+    headers: {
+      Location: '/',
+      'Set-Cookie': `riot_id_token=${idToken}; Expires=${expires}; Secure; HttpOnly; Path=/`
+    },
+  });
 }
