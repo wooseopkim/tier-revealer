@@ -5,6 +5,7 @@
   } from '$env/static/public';
   import { onMount } from 'svelte';
   import riotIdToken from '$lib/store/riotIdToken';
+  import cachedFetch from '$lib/cache/cachedFetch';
 
   const signOnUrl = new URL('https://auth.riotgames.com');
   signOnUrl.pathname = 'authorize';
@@ -34,7 +35,9 @@
       }
 
       identity = new Promise(async (resolve, reject) => {
-        const res = await fetch('/api/riot/me', {
+        const url = '/api/riot/me';
+        const fetch = cachedFetch({ url, ttl: 60 });
+        const res = await fetch(url, {
           headers: {
             Authorization: `Bearer ${value}`,
           },

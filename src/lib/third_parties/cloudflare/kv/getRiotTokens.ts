@@ -1,3 +1,4 @@
+import cachedFetch from '$lib/cache/cachedFetch';
 import type { KVNamespace } from '@cloudflare/workers-types/experimental';
 import { decodeProtectedHeader, importJWK, jwtVerify, type JWK } from 'jose';
 
