@@ -7,7 +7,7 @@ export async function load({ request }) {
   const riotIdToken = cookie
     .split('; ')
     .map((kv) => kv.split('=') as [string, string])
-    .find(([k, _]) => k === 'riot_id_token')?.[1];
+    .find(([k]) => k === 'riot_id_token')?.[1];
   if (riotIdToken === undefined) {
     return;
   }
