@@ -4,6 +4,12 @@ on:
   push:
     branches: 'main'
 
+env:
+  RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+  RIOT_SIGN_ON_CLIENT_SECRET: ${{ secrets.RIOT_SIGN_ON_CLIENT_SECRET }}
+  PUBLIC_RIOT_SIGN_ON_CLIENT_ID: ${{ vars.PUBLIC_RIOT_SIGN_ON_CLIENT_ID }}
+  PUBLIC_RIOT_SIGN_ON_REDIRECT_URI: ${{ vars.PUBLIC_RIOT_SIGN_ON_REDIRECT_URI }}
+
 jobs:
   build_site:
     runs-on: ubuntu-latest
