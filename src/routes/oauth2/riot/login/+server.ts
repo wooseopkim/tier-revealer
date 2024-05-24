@@ -26,14 +26,14 @@ export async function GET({ url, platform }) {
   });
 
   const idToken = payload.id_token;
-  const exp = decodeJwt(idToken).exp!
+  const exp = decodeJwt(idToken).exp!;
   const expires = new Date(exp * 1000).toUTCString();
 
   return new Response('', {
     status: 307,
     headers: {
       Location: '/',
-      'Set-Cookie': `riot_id_token=${idToken}; Expires=${expires}; Secure; HttpOnly; Path=/`
+      'Set-Cookie': `riot_id_token=${idToken}; Expires=${expires}; Secure; HttpOnly; Path=/`,
     },
   });
 }

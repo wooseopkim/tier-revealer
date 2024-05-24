@@ -53,7 +53,7 @@ export default function cachedFetch(
     }
 
     await cache.put(req, res.clone());
-    
+
     return res;
   };
 }
