@@ -58,5 +58,8 @@
     "**/*.svelte": [
       "npm run check"
     ]
+  },
+  "volta": {
+    "node": "20.13.1"
   }
 }
