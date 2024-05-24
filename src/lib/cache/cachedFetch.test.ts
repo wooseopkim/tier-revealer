@@ -66,7 +66,7 @@ describe(cachedFetch, () => {
 
     const res = await fetch('https://example.com');
 
-    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as any[])[1]!.ttl;
+    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
     expect(res.headers.get('Cache-Control')).toBe(`max-age: ${ttl}`);
   });
 
@@ -78,7 +78,7 @@ describe(cachedFetch, () => {
 
     const res = await fetch('https://example.com');
 
-    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as any[])[1]!.ttl;
+    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
     expect(res.headers.get('Cache-Control')).not.toBe(`max-age: ${ttl}`);
     expect(res.headers.get('Cache-Control')).toBe('max-age: 1234');
   });
