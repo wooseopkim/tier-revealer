@@ -34,6 +34,6 @@ jobs:
       - run: npm run check --workspaces --if-present
 
       - name: Deploy
-        run: npx wrangler pages deploy --workspace=web
+        run: npx wrangler pages deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
