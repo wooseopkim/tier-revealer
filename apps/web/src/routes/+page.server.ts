@@ -13,26 +13,21 @@ export async function load({ request, platform }) {
     { riotIdToken },
   );
 
-  try {
-    const me = await getMe(
-      {
-        namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
-        database: platform!.env.D1_DB,
-      },
-      { riotIdToken },
-    );
-    if (me instanceof Error) {
-      console.error(me);
-      return;
-    }
-    const { riotIdentity, connections } = me;
-    return {
-      riotIdentity,
-      authChallenge,
-      connections,
-    };
-  } catch (e) {
-    console.error(e);
+  const me = await getMe(
+    {
+      namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+      database: platform!.env.D1_DB,
+    },
+    { riotIdToken },
+  );
+  if (me instanceof Error) {
+    console.error(me);
     return;
   }
+  const { riotIdentity, connections } = me;
+  return {
+    riotIdentity,
+    authChallenge,
+    connections,
+  };
 }
