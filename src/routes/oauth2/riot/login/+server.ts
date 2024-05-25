@@ -1,5 +1,5 @@
-import getOauth2Tokens from '$lib/third_parties/riot/api/getOauth2Tokens.js';
-import putRiotTokens from '$lib/third_parties/cloudflare/kv/putRiotTokens.js';
+import putRiotTokens from '$lib/adapters/cloudflare/kv/putRiotTokens.js';
+import getOauth2Tokens from '$lib/adapters/riot/api/getOauth2Tokens.js';
 import { decodeJwt } from 'jose';
 
 export async function GET({ url, platform }) {

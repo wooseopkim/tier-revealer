@@ -1,5 +1,5 @@
+import getRiotTokens from '$lib/adapters/cloudflare/kv/getRiotTokens.js';
 import getMe from '$lib/interactors/riot/getMe.js';
-import getRiotTokens from '$lib/third_parties/cloudflare/kv/getRiotTokens.js';
 
 export async function load({ request, platform }) {
   const cookie = request.headers.get('Cookie');

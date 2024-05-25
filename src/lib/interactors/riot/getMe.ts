@@ -1,6 +1,6 @@
-import getLeagueEntry from '$lib/third_parties/riot/api/getLeagueEntry';
-import getMyAccount from '$lib/third_parties/riot/api/getMyAccount';
-import getMySummoner from '$lib/third_parties/riot/api/getMySummoner';
+import getLeagueEntry from '$lib/adapters/riot/api/getLeagueEntry';
+import getMyAccount from '$lib/adapters/riot/api/getMyAccount';
+import getMySummoner from '$lib/adapters/riot/api/getMySummoner';
 
 interface Params {
   accessToken: string;
