@@ -5,6 +5,7 @@ import getRiotTokens from '@tier-revealer/adapters/cloudflare/kv/getRiotTokens';
 import getLeagueEntry from '@tier-revealer/adapters/riot/api/getLeagueEntry';
 import getMyAccount from '@tier-revealer/adapters/riot/api/getMyAccount';
 import getMySummoner from '@tier-revealer/adapters/riot/api/getMySummoner';
+import type Identity from '@tier-revealer/lib/models/riot/Identity';
 import verifyToken from './verifyToken';
 
 interface Context extends KVContext, D1Context {}
@@ -44,20 +45,23 @@ export default async function getMe(context: Context, { riotIdToken }: Params) {
   }
 
   const [entries, account] = responses;
-  const { tier, rank } = entries.find(
-    ({ queueType }: { queueType: string }) => queueType === 'RANKED_TFT',
-  );
-  const { gameName } = account;
 
-  const { results } = await getAccountConnections(context, { riotSub });
+  const { gameName } = account;
+  const leagueEntries = entries.map(({ tier, rank, queueType }: Record<string, string>) => ({
+    tier,
+    rank,
+    queueType,
+  }));
+  const riotIdentity: Identity = {
+    gameName,
+    leagueEntries,
+  };
+
+  const { results: connections } = await getAccountConnections(context, { riotSub });
 
   return {
-    riotIdentity: {
-      tier,
-      rank,
-      gameName,
-    } as Record<string, string>,
-    connections: results,
+    riotIdentity,
+    connections,
   };
 }
 

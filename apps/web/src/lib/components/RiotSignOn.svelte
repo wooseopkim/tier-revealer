@@ -3,8 +3,9 @@
     PUBLIC_RIOT_SIGN_ON_CLIENT_ID,
     PUBLIC_RIOT_SIGN_ON_REDIRECT_URI,
   } from '$env/static/public';
+  import type Identity from '@tier-revealer/lib/models/riot/Identity';
 
-  export let riotIdentity: Record<string, string> | null = null;
+  export let riotIdentity: Identity | null = null;
 
   const signOnUrl = new URL('https://auth.riotgames.com');
   signOnUrl.pathname = 'authorize';
@@ -20,7 +21,11 @@
   {#if !riotIdentity}
     <a href={signOnUrl.toString()}>Riot ID 연결</a>
   {:else}
-    {@const { gameName, tier, rank } = riotIdentity}
-    <span>{gameName} ({tier} {rank})</span>
+    <h3>{riotIdentity.gameName}</h3>
+    <ul>
+      {#each riotIdentity.leagueEntries as entry}
+        <li>{entry.queueType} ({entry.tier} {entry.rank})</li>
+      {/each}
+    </ul>
   {/if}
 </section>
