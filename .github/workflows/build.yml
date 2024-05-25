@@ -28,10 +28,10 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - run: npm run lint --workspaces --if-present-only
-      - run: npm run build --workspaces --if-present-only
-      - run: npm run test --workspaces --if-present-only
-      - run: npm run check --workspaces --if-present-only
+      - run: npm run lint --workspaces --if-present
+      - run: npm run build --workspaces --if-present
+      - run: npm run test --workspaces --if-present
+      - run: npm run check --workspaces --if-present
 
       - name: Deploy
         run: npx wrangler pages deploy
