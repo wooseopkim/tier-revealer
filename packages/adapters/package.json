@@ -1,0 +1,15 @@
+{
+  "name": "@tier-revealer/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@tier-revealer/lib": "file:../lib",
+    "jose": "^5.3.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240512.0"
+  }
+}

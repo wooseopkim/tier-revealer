@@ -27,5 +27,20 @@ module.exports = {
         parser: '@typescript-eslint/parser',
       },
     },
+    {
+      files: ['apps/**/*'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['@tier-revealer/adapters/*'],
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
 };
