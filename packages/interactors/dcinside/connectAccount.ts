@@ -1,3 +1,4 @@
+import { DCINSIDE_CONNECTION_GALLERY_ID } from '$env/static/private';
 import type D1Context from '@tier-revealer/adapters/cloudflare/d1/D1Context';
 import connectDcinsideAccount from '@tier-revealer/adapters/cloudflare/d1/connectDcinsideAccount';
 import { type KVContext } from '@tier-revealer/adapters/cloudflare/kv/KVContext';
@@ -26,7 +27,8 @@ export default async function connectAccount(
   const gallogPosts = await getGallogPosts({ identificationCode });
 
   const post = gallogPosts.find(
-    ({ galleryId, postTitle }) => galleryId === 'lolpet' && postTitle === authChallenge,
+    ({ galleryId, postTitle }) =>
+      galleryId === DCINSIDE_CONNECTION_GALLERY_ID && postTitle === authChallenge,
   );
   if (post === undefined) {
     return new PostNotFoundError();
