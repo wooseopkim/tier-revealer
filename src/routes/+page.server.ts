@@ -1,16 +1,11 @@
+import getAccountConnections from '$lib/adapters/cloudflare/d1/getAccountConnections.js';
 import getRiotTokens from '$lib/adapters/cloudflare/kv/getRiotTokens.js';
+import getRiotIdToken from '$lib/http/getRiotIdToken.js';
+import getAuthChallenge from '$lib/interactors/getAuthChallenge.js';
 import getMe from '$lib/interactors/riot/getMe.js';
 
 export async function load({ request, platform }) {
-  const cookie = request.headers.get('Cookie');
-  if (cookie === null) {
-    return;
-  }
-
-  const riotIdToken = cookie
-    .split('; ')
-    .map((kv) => kv.split('=') as [string, string])
-    .find(([k]) => k === 'riot_id_token')?.[1];
+  const riotIdToken = getRiotIdToken(request);
   if (riotIdToken === undefined) {
     return;
   }
@@ -24,6 +19,15 @@ export async function load({ request, platform }) {
   }
 
   const { access_token: accessToken } = JSON.parse(tokens);
+  const authChallenge = await getAuthChallenge({
+    namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES,
+    riotIdToken,
+  });
+
+  const { results: connections } = await getAccountConnections({
+    database: platform!.env.D1_DB,
+    riotIdToken,
+  });
 
   try {
     const { tier, rank, gameName } = await getMe({ accessToken });
@@ -34,6 +38,8 @@ export async function load({ request, platform }) {
     };
     return {
       riotIdentity,
+      authChallenge,
+      connections,
     };
   } catch {
     return;

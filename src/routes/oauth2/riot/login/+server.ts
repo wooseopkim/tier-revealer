@@ -1,5 +1,7 @@
+import putAuthChallenge from '$lib/adapters/cloudflare/kv/putAuthChallenge.js';
 import putRiotTokens from '$lib/adapters/cloudflare/kv/putRiotTokens.js';
 import getOauth2Tokens from '$lib/adapters/riot/api/getOauth2Tokens.js';
+import createAuthChallenge from '$lib/interactors/createAuthChallenge.js';
 import { decodeJwt } from 'jose';
 
 export async function GET({ url, platform }) {
@@ -20,10 +22,18 @@ export async function GET({ url, platform }) {
     id_token: string;
     access_token: string;
   };
-  await putRiotTokens({
-    namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
-    payload,
-  });
+  const challenge = createAuthChallenge();
+  Promise.all([
+    putRiotTokens({
+      namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+      payload,
+    }),
+    putAuthChallenge({
+      namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES,
+      riotIdToken: payload.id_token,
+      challenge,
+    }),
+  ]);
 
   const idToken = payload.id_token;
   const exp = decodeJwt(idToken).exp!;

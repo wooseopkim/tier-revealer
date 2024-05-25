@@ -15,9 +15,11 @@
   signOnUrl.search = signOnParams.toString();
 </script>
 
-{#if !$riotIdentity}
-  <a href={signOnUrl.toString()}>Riot ID 연결</a>
-{:else}
-  {@const { gameName, tier, rank } = $riotIdentity}
-  <span>{gameName} ({tier} {rank})</span>
-{/if}
+<section>
+  {#if !$riotIdentity}
+    <a href={signOnUrl.toString()}>Riot ID 연결</a>
+  {:else}
+    {@const { gameName, tier, rank } = $riotIdentity}
+    <span>{gameName} ({tier} {rank})</span>
+  {/if}
+</section>
