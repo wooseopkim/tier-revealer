@@ -6,7 +6,7 @@ import getGallogPosts from './getGallogPosts';
 describe(getGallogPosts, () => {
   beforeEach(() => {
     const html = fs.readFileSync(
-      path.resolve(path.dirname(import.meta.url.replace(/^file:/, '')), 'gallog.html'),
+      path.resolve(path.dirname(import.meta.url.replace(/^file:/, '')), 'gallog.testdata.html'),
     );
     vi.stubGlobal(
       'fetch',
