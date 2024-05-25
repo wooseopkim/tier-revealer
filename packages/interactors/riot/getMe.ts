@@ -7,22 +7,23 @@ import getMyAccount from '@tier-revealer/adapters/riot/api/getMyAccount';
 import getMySummoner from '@tier-revealer/adapters/riot/api/getMySummoner';
 import verifyToken from './verifyToken';
 
+interface Context extends KVContext, D1Context {}
+
 interface Params {
-  context: KVContext & D1Context;
   riotIdToken: string;
 }
 
-export default async function getMe({ context, riotIdToken }: Params) {
+export default async function getMe(context: Context, { riotIdToken }: Params) {
   const { payload: claims } = await verifyToken({ token: riotIdToken });
   const riotSub = claims.sub!;
 
   const tokens = await getRiotTokens(context, { riotSub });
   if (tokens === null) {
-    return null;
+    return new NoTokensError();
   }
-  const { accessToken } = tokens;
+  const { access_token: accessToken } = tokens;
 
-  const [entries, account] = await Promise.all(
+  const responses = await Promise.all(
     [
       getMySummoner({ accessToken })
         .then((x) => x.json())
@@ -31,11 +32,18 @@ export default async function getMe({ context, riotIdToken }: Params) {
     ].map(async (x) => {
       const res = await x;
       if (res.status !== 200) {
-        throw new Error(`${res.url}:${res.status}`);
+        return new ApiError(res);
       }
       return res.json();
     }),
   );
+
+  const error: Error = responses.find((x) => x instanceof Error);
+  if (error) {
+    return error;
+  }
+
+  const [entries, account] = responses;
   const { tier, rank } = entries.find(
     ({ queueType }: { queueType: string }) => queueType === 'RANKED_TFT',
   );
@@ -51,4 +59,19 @@ export default async function getMe({ context, riotIdToken }: Params) {
     } as Record<string, string>,
     connections: results,
   };
+}
+
+class ApiError extends Error {
+  response: Response;
+
+  constructor(res: Response) {
+    super();
+    this.response = res;
+  }
+}
+
+class NoTokensError extends Error {
+  constructor() {
+    super();
+  }
 }

@@ -8,22 +8,21 @@ export async function load({ request, platform }) {
     return;
   }
 
-  const authChallenge = await getOrCreateAuthChallenge({
-    context: {
-      namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES,
-    },
-    riotIdToken,
-  });
+  const authChallenge = await getOrCreateAuthChallenge(
+    { namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES },
+    { riotIdToken },
+  );
 
   try {
-    const me = await getMe({
-      context: {
+    const me = await getMe(
+      {
         namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
         database: platform!.env.D1_DB,
       },
-      riotIdToken,
-    });
-    if (me === null) {
+      { riotIdToken },
+    );
+    if (me instanceof Error) {
+      console.error(me);
       return;
     }
     const { riotIdentity, connections } = me;
@@ -32,7 +31,8 @@ export async function load({ request, platform }) {
       authChallenge,
       connections,
     };
-  } catch {
+  } catch (e) {
+    console.error(e);
     return;
   }
 }

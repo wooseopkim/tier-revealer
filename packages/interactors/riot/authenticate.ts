@@ -18,7 +18,7 @@ export default async function authenticate(
 ) {
   const res = await getOauth2Tokens({ code });
   if (!res.ok) {
-    return null;
+    return new Oauth2TokensError(res);
   }
 
   const payload: {
@@ -46,4 +46,13 @@ export default async function authenticate(
   const idTokenExpires = new Date(exp * 1000).toUTCString();
 
   return { idToken, idTokenExpires };
+}
+
+class Oauth2TokensError extends Error {
+  response: Response;
+
+  constructor(res: Response) {
+    super();
+    this.response = res;
+  }
 }

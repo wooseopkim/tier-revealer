@@ -4,12 +4,13 @@ import putAuthChallenge from '@tier-revealer/adapters/cloudflare/kv/putAuthChall
 import createAuthChallenge from './createAuthChallenge';
 import verifyToken from './riot/verifyToken';
 
+interface Context extends KVContext {}
+
 interface Params {
-  context: KVContext;
   riotIdToken: string;
 }
 
-export default async function getOrCreateAuthChallenge({ context, riotIdToken }: Params) {
+export default async function getOrCreateAuthChallenge(context: Context, { riotIdToken }: Params) {
   const { payload: claims } = await verifyToken({ token: riotIdToken });
   const riotSub = claims.sub!;
 

@@ -14,8 +14,16 @@ export async function GET({ url, platform }) {
     },
     { code },
   );
-  if (result === null) {
-    return new Response('', { status: 500 });
+  if (result instanceof Error) {
+    const { response } = result;
+    return Response.json(
+      {
+        code: 'OAUTH2_FAILED',
+        message: 'Riot OAuth2 authentication failed',
+        original: await response.json(),
+      },
+      { status: response.status },
+    );
   }
 
   const { idToken, idTokenExpires } = result;
