@@ -1,4 +1,7 @@
-export async function load({ request }) {
+import getMe from '$lib/interactors/riot/getMe.js';
+import getRiotTokens from '$lib/third_parties/cloudflare/kv/getRiotTokens.js';
+
+export async function load({ request, platform }) {
   const cookie = request.headers.get('Cookie');
   if (cookie === null) {
     return;
@@ -12,7 +15,27 @@ export async function load({ request }) {
     return;
   }
 
-  return {
-    riotIdToken,
-  };
+  const tokens = await getRiotTokens({
+    namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+    idToken: riotIdToken,
+  });
+  if (!tokens) {
+    return new Response('', { status: 404 });
+  }
+
+  const { access_token: accessToken } = JSON.parse(tokens);
+
+  try {
+    const { tier, rank, gameName } = await getMe({ accessToken });
+    const riotIdentity: Record<string, string> = {
+      tier,
+      rank,
+      gameName,
+    };
+    return {
+      riotIdentity,
+    };
+  } catch {
+    return;
+  }
 }
