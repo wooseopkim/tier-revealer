@@ -2,7 +2,7 @@
   let identificationCode: string;
 
   async function onIdentificationCodeSubmit() {
-    const res = await fetch('/api/dcinside/connect', {
+    const res = await fetch('/api/connections/dcinside', {
       method: 'POST',
       body: JSON.stringify({
         identificationCode,
