@@ -1,8 +1,8 @@
-const {
+import { RIOT_SIGN_ON_CLIENT_SECRET } from '$env/static/private';
+import {
   PUBLIC_RIOT_SIGN_ON_CLIENT_ID,
   PUBLIC_RIOT_SIGN_ON_REDIRECT_URI,
-  RIOT_SIGN_ON_CLIENT_SECRET,
-} = import.meta.env;
+} from '$env/static/public';
 
 interface Params {
   code: string;

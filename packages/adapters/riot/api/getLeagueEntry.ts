@@ -1,4 +1,4 @@
-const { RIOT_API_KEY } = import.meta.env;
+import { RIOT_API_KEY } from '$env/static/private';
 import cachedFetch from '@tier-revealer/lib/cache/cachedFetch';
 
 interface Params {
