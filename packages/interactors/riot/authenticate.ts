@@ -2,6 +2,7 @@ import { type KVContext } from '@tier-revealer/adapters/cloudflare/kv/KVContext'
 import putAuthChallenge from '@tier-revealer/adapters/cloudflare/kv/putAuthChallenge';
 import putRiotTokens from '@tier-revealer/adapters/cloudflare/kv/putRiotTokens';
 import getOauth2Tokens from '@tier-revealer/adapters/riot/api/getOauth2Tokens';
+import BaseHttpError from '@tier-revealer/lib/models/BaseHttpError';
 import { decodeJwt } from 'jose';
 import createAuthChallenge from '../createAuthChallenge';
 
@@ -48,11 +49,8 @@ export default async function authenticate(
   return { idToken, idTokenExpires };
 }
 
-class Oauth2TokensError extends Error {
-  response: Response;
-
+class Oauth2TokensError extends BaseHttpError {
   constructor(res: Response) {
-    super();
-    this.response = res;
+    super(res, 'OAUTH2_TOKENS_ERROR');
   }
 }

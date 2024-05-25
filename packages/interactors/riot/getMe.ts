@@ -5,6 +5,8 @@ import getRiotTokens from '@tier-revealer/adapters/cloudflare/kv/getRiotTokens';
 import getLeagueEntry from '@tier-revealer/adapters/riot/api/getLeagueEntry';
 import getMyAccount from '@tier-revealer/adapters/riot/api/getMyAccount';
 import getMySummoner from '@tier-revealer/adapters/riot/api/getMySummoner';
+import BaseError from '@tier-revealer/lib/models/BaseError';
+import BaseHttpError from '@tier-revealer/lib/models/BaseHttpError';
 import type Identity from '@tier-revealer/lib/models/riot/Identity';
 import verifyToken from './verifyToken';
 
@@ -20,7 +22,7 @@ export default async function getMe(context: Context, { riotIdToken }: Params) {
 
   const tokens = await getRiotTokens(context, { riotSub });
   if (tokens === null) {
-    return new NoTokensError();
+    return new TokensNotFoundError();
   }
   const { access_token: accessToken } = tokens;
 
@@ -65,17 +67,13 @@ export default async function getMe(context: Context, { riotIdToken }: Params) {
   };
 }
 
-class ApiError extends Error {
-  response: Response;
-
+class ApiError extends BaseHttpError {
   constructor(res: Response) {
-    super();
-    this.response = res;
+    super(res, 'RIOT_API_ERROR');
   }
 }
 
-class NoTokensError extends Error {
-  constructor() {
-    super();
-  }
+class TokensNotFoundError extends Error implements BaseError {
+  code = 'TOKENS_NOT_FOUND';
+  message = 'Riot tokens not found';
 }

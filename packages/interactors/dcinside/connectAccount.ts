@@ -4,6 +4,7 @@ import connectDcinsideAccount from '@tier-revealer/adapters/cloudflare/d1/connec
 import { type KVContext } from '@tier-revealer/adapters/cloudflare/kv/KVContext';
 import getAuthChallenge from '@tier-revealer/adapters/cloudflare/kv/getAuthChallenge';
 import getGallogPosts from '@tier-revealer/adapters/dcinside/getGallogPosts';
+import BaseError from '@tier-revealer/lib/models/BaseError';
 import verifyToken from '../riot/verifyToken';
 
 interface Params {
@@ -40,12 +41,12 @@ export default async function connectAccount(
   });
 }
 
-class AuthChallengeNotFoundError extends Error {
+class AuthChallengeNotFoundError extends Error implements BaseError {
   code = 'AUTH_CHALLENGE_NOT_FOUND';
   message = 'auth challenge not found';
 }
 
-class PostNotFoundError extends Error {
+class PostNotFoundError extends Error implements BaseError {
   code = 'POST_NOT_FOUND';
   message = 'DCInside authentication post not found';
 }
