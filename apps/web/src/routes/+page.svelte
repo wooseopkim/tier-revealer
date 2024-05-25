@@ -6,6 +6,7 @@
 </script>
 
 <RiotSignOn riotIdentity={data.riotIdentity} />
-<DcInsideBridge />
+<DcInsideBridge
+  connection={data.connections?.find(({ connection_type }) => connection_type === 'dcinside')}
+/>
 <div>{data.authChallenge}</div>
-<div>{JSON.stringify(data.connections)}</div>

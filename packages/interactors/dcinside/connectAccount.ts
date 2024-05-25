@@ -21,7 +21,7 @@ export default async function connectAccount(
     riotSub,
   });
   if (authChallenge === null) {
-    return;
+    return new AuthChallengeNotFoundError();
   }
   const gallogPosts = await getGallogPosts({ identificationCode });
 
@@ -29,11 +29,21 @@ export default async function connectAccount(
     ({ galleryId, postTitle }) => galleryId === 'lolpet' && postTitle === authChallenge,
   );
   if (post === undefined) {
-    return;
+    return new PostNotFoundError();
   }
 
   await connectDcinsideAccount(context, {
     riotSub,
     dcinsideIdentificationCode: identificationCode,
   });
+}
+
+class AuthChallengeNotFoundError extends Error {
+  code = 'AUTH_CHALLENGE_NOT_FOUND';
+  message = 'auth challenge not found';
+}
+
+class PostNotFoundError extends Error {
+  code = 'POST_NOT_FOUND';
+  message = 'DCInside authentication post not found';
 }

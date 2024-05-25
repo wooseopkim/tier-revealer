@@ -8,9 +8,9 @@ export async function POST({ request, platform }) {
   }
   const { identificationCode } = await request.json();
 
-  await connectAccount(
+  const error = await connectAccount(
     {
-      namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+      namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES,
       database: platform!.env.D1_DB,
     },
     {
@@ -18,6 +18,9 @@ export async function POST({ request, platform }) {
       identificationCode,
     },
   );
+  if (error !== undefined) {
+    return Response.json(error, { status: 404 });
+  }
 
   return Response.json({});
 }

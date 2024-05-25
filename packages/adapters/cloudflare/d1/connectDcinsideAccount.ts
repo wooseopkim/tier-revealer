@@ -16,5 +16,5 @@ export default async function connectDcinsideAccount(
     .trim()
     .replace(/(\n|\s{2,})/g, '');
   const statement = database.prepare(query).bind(riotSub, dcinsideIdentificationCode);
-  await statement.run();
+  console.log(await statement.run());
 }

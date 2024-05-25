@@ -1,5 +1,9 @@
 <script lang="ts">
+  export let connection: Record<string, unknown> | undefined = undefined;
+
   let identificationCode: string;
+
+  $: identificationCode = (connection?.connection_data as string) ?? '';
 
   async function onIdentificationCodeSubmit() {
     const res = await fetch('/api/connections/dcinside', {
