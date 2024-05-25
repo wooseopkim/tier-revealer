@@ -16,7 +16,10 @@ export default async function getGallogPosts({ identificationCode }: Params) {
       const $ = cheerio.load(x);
       const postTitle = $('.galltit').text().trim();
       const galleryName = $('.gall_name').text().trim();
+      const galleryLink = $('.gall_linkbox a.link[href]').attr('href');
       const dateString = $('.date').text().trim();
+
+      const galleryId = new URL(galleryLink ?? '').searchParams.get('id');
 
       const { yyyy, MM, dd } =
         dateString?.match(/^(?<yyyy>\d{4})\.(?<MM>\d{1,2})\.(?<dd>\d{1,2})$/)?.groups ?? {};
@@ -30,7 +33,7 @@ export default async function getGallogPosts({ identificationCode }: Params) {
         timeZone: 'Asia/Seoul',
       });
 
-      return { galleryName, postTitle, date };
+      return { galleryName, galleryId, postTitle, date };
     });
   return posts;
 }

@@ -19,11 +19,13 @@ describe(getGallogPosts, () => {
 
     expect(res).toEqual([
       {
+        galleryId: 'lolpet',
         galleryName: '전설이(롤토체스)',
         postTitle: '테스트',
         date: new Date('2024-05-24T15:00:00Z'),
       },
       {
+        galleryId: 'lolpet',
         galleryName: '전설이(롤토체스)',
         postTitle: '테스트',
         date: new Date('2024-05-24T15:00:00Z'),
