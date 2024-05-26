@@ -19,7 +19,7 @@ export default async function authenticate(
 ) {
   const res = await getOauth2Tokens({ code });
   if (!res.ok) {
-    return new Oauth2TokensError(res);
+    return Oauth2TokensError.from(res);
   }
 
   const payload: {
@@ -50,7 +50,7 @@ export default async function authenticate(
 }
 
 class Oauth2TokensError extends BaseHttpError {
-  constructor(res: Response) {
-    super(res, 'OAUTH2_TOKENS_ERROR');
+  static async from(res: Response) {
+    return await BaseHttpError.from(res, 'OAUTH2_TOKENS_ERROR');
   }
 }

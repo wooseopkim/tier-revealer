@@ -1,10 +1,9 @@
-import { DCINSIDE_CONNECTION_GALLERY_ID } from '$env/static/private';
 import type D1Context from '@tier-revealer/adapters/cloudflare/d1/D1Context';
 import connectDcinsideAccount from '@tier-revealer/adapters/cloudflare/d1/connectDcinsideAccount';
 import { type KVContext } from '@tier-revealer/adapters/cloudflare/kv/KVContext';
 import getAuthChallenge from '@tier-revealer/adapters/cloudflare/kv/getAuthChallenge';
 import getGallogPosts from '@tier-revealer/adapters/dcinside/getGallogPosts';
-import BaseError from '@tier-revealer/lib/models/BaseError';
+import type BaseError from '@tier-revealer/lib/models/BaseError';
 import verifyToken from '../riot/verifyToken';
 
 interface Params {

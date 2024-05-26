@@ -5,7 +5,7 @@ import getRiotTokens from '@tier-revealer/adapters/cloudflare/kv/getRiotTokens';
 import getLeagueEntry from '@tier-revealer/adapters/riot/api/getLeagueEntry';
 import getMyAccount from '@tier-revealer/adapters/riot/api/getMyAccount';
 import getMySummoner from '@tier-revealer/adapters/riot/api/getMySummoner';
-import BaseError from '@tier-revealer/lib/models/BaseError';
+import type BaseError from '@tier-revealer/lib/models/BaseError';
 import BaseHttpError from '@tier-revealer/lib/models/BaseHttpError';
 import type Identity from '@tier-revealer/lib/models/riot/Identity';
 import verifyToken from './verifyToken';
@@ -35,7 +35,7 @@ export default async function getMe(context: Context, { riotIdToken }: Params) {
     ].map(async (x) => {
       const res = await x;
       if (res.status !== 200) {
-        return new ApiError(res);
+        return ApiError.from(res);
       }
       return res.json();
     }),
@@ -68,8 +68,8 @@ export default async function getMe(context: Context, { riotIdToken }: Params) {
 }
 
 class ApiError extends BaseHttpError {
-  constructor(res: Response) {
-    super(res, 'RIOT_API_ERROR');
+  static async from(res: Response) {
+    return await BaseHttpError.from(res, 'RIOT_API_ERROR');
   }
 }
 
