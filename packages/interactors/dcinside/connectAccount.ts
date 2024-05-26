@@ -3,6 +3,7 @@ import connectDcinsideAccount from '@tier-revealer/adapters/cloudflare/d1/connec
 import { type KVContext } from '@tier-revealer/adapters/cloudflare/kv/KVContext';
 import getAuthChallenge from '@tier-revealer/adapters/cloudflare/kv/getAuthChallenge';
 import getGallogPosts from '@tier-revealer/adapters/dcinside/getGallogPosts';
+import { DCINSIDE_CONNECTION_GALLERY_ID } from '@tier-revealer/lib/env/private';
 import type BaseError from '@tier-revealer/lib/models/BaseError';
 import verifyToken from '../riot/verifyToken';
 

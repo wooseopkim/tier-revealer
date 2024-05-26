@@ -1,8 +1,8 @@
-import { RIOT_SIGN_ON_CLIENT_SECRET } from '$env/static/private';
+import { RIOT_SIGN_ON_CLIENT_SECRET } from '@tier-revealer/lib/env/private';
 import {
   PUBLIC_RIOT_SIGN_ON_CLIENT_ID,
   PUBLIC_RIOT_SIGN_ON_REDIRECT_URI,
-} from '$env/static/public';
+} from '@tier-revealer/lib/env/public';
 
 interface Params {
   code: string;

@@ -1,5 +1,5 @@
-import { RIOT_API_KEY } from '$env/static/private';
 import cachedFetch from '@tier-revealer/lib/cache/cachedFetch';
+import { RIOT_API_KEY } from '@tier-revealer/lib/env/private';
 
 interface Params {
   summonerId: string;

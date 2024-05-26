@@ -1,8 +1,5 @@
 {
   "extends": [
     "../../tsconfig.json"
-  ],
-  "files": [
-    "../../apps/web/.svelte-kit/ambient.d.ts"
   ]
 }

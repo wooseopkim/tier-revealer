@@ -9,5 +9,8 @@
     "strict": true,
     "module": "Preserve",
     "moduleResolution": "bundler"
-  }
+  },
+  "files": [
+    "apps/web/.svelte-kit/ambient.d.ts"
+  ]
 }
