@@ -38,6 +38,12 @@ jobs:
           PUBLIC_RIOT_SIGN_ON_REDIRECT_URI: ${{ vars.PUBLIC_RIOT_SIGN_ON_REDIRECT_URI }}
           DCINSIDE_CONNECTION_GALLERY_ID : ${{ vars.DCINSIDE_CONNECTION_GALLERY_ID  }}
       - run: npm run check --workspaces --if-present
+        env:
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+          RIOT_SIGN_ON_CLIENT_SECRET: ${{ secrets.RIOT_SIGN_ON_CLIENT_SECRET }}
+          PUBLIC_RIOT_SIGN_ON_CLIENT_ID: ${{ vars.PUBLIC_RIOT_SIGN_ON_CLIENT_ID }}
+          PUBLIC_RIOT_SIGN_ON_REDIRECT_URI: ${{ vars.PUBLIC_RIOT_SIGN_ON_REDIRECT_URI }}
+          DCINSIDE_CONNECTION_GALLERY_ID : ${{ vars.DCINSIDE_CONNECTION_GALLERY_ID  }}
 
       - name: Migrate DB
         run: npx wrangler d1 migrations apply 'tier-revealer' --remote
