@@ -54,4 +54,3 @@ jobs:
         run: npx wrangler pages deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CI: "true"
