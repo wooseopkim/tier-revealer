@@ -5,8 +5,8 @@ interface Params {
   summonerId: string;
 }
 
-export default async function getLeagueEntry({ summonerId }: Params) {
-  const fetch = cachedFetch(getLeagueEntry, { ttl: 300 });
+export default async function getTftLeagueEntries({ summonerId }: Params) {
+  const fetch = cachedFetch(getTftLeagueEntries, { ttl: 300 });
   const res = await fetch(
     `https://kr.api.riotgames.com/tft/league/v1/entries/by-summoner/${encodeURIComponent(summonerId)}`,
     {

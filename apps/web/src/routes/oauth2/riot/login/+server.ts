@@ -11,6 +11,7 @@ export async function GET({ url, platform }) {
     {
       authChallengeNamespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES,
       riotTokensNamespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
+      database: platform!.env.D1_DB,
     },
     { code },
   );

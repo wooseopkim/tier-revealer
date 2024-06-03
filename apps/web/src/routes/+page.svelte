@@ -5,8 +5,10 @@
   export let data;
 </script>
 
-<RiotSignOn riotIdentity={data.riotIdentity} />
+<RiotSignOn data={data.riotData} />
 <DcInsideBridge
-  connection={data.connections?.find(({ connection_type }) => connection_type === 'dcinside')}
+  connection={data?.riotData?.connections?.find(
+    ({ connection_type }) => connection_type === 'dcinside',
+  )}
 />
 <div>{data.authChallenge}</div>

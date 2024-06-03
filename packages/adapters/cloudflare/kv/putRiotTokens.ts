@@ -8,5 +8,9 @@ interface Params {
 export default async function putRiotTokens({ namespace }: KVContext, { payload }: Params) {
   const { id_token: idToken } = payload;
   const claims = decodeJwt(idToken);
-  await namespace.put(claims.sub!, JSON.stringify(payload), { expiration: claims.exp });
+  try {
+    await namespace.put(claims.sub!, JSON.stringify(payload), { expiration: claims.exp });
+  } catch (e: unknown) {
+    return e as Error;
+  }
 }

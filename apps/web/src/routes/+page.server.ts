@@ -1,5 +1,5 @@
 import getOrCreateAuthChallenge from '@tier-revealer/interactors/getOrCreateAuthChallenge';
-import getMe from '@tier-revealer/interactors/riot/getMe';
+import verifyAndUpdateMe from '@tier-revealer/interactors/riot/verifyAndUpdateMe';
 import getCookieValue from '@tier-revealer/lib/http/getCookieValue';
 
 export async function load({ request, platform }) {
@@ -8,26 +8,30 @@ export async function load({ request, platform }) {
     return;
   }
 
-  const authChallenge = await getOrCreateAuthChallenge(
-    { namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES },
-    { riotIdToken },
-  );
-
-  const me = await getMe(
+  const me = await verifyAndUpdateMe(
     {
       namespace: platform!.env.KV_NAMESPACE_RIOT_TOKENS,
       database: platform!.env.D1_DB,
     },
-    { riotIdToken },
+    { idToken: riotIdToken },
   );
   if (me instanceof Error) {
     console.error(me);
     return;
   }
-  const { riotIdentity, connections } = me;
+
+  const authChallenge = await getOrCreateAuthChallenge(
+    { namespace: platform!.env.KV_NAMESPACE_AUTH_CHALLENGES },
+    { riotIdToken },
+  );
+  if (authChallenge instanceof Error) {
+    return {
+      riotData: me,
+    };
+  }
+
   return {
-    riotIdentity,
+    riotData: me,
     authChallenge,
-    connections,
   };
 }

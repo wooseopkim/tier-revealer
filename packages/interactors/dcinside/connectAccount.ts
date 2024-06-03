@@ -7,13 +7,15 @@ import { DCINSIDE_CONNECTION_GALLERY_ID } from '@tier-revealer/lib/env/private';
 import type BaseError from '@tier-revealer/lib/models/BaseError';
 import verifyToken from '../riot/verifyToken';
 
+interface Context extends KVContext, D1Context {}
+
 interface Params {
   riotIdToken: string;
   identificationCode: string;
 }
 
 export default async function connectAccount(
-  context: KVContext & D1Context,
+  context: Context,
   { riotIdToken, identificationCode }: Params,
 ) {
   const { payload: claims } = await verifyToken({ token: riotIdToken });
@@ -22,8 +24,8 @@ export default async function connectAccount(
   const authChallenge = await getAuthChallenge(context, {
     riotSub,
   });
-  if (authChallenge === null) {
-    return new AuthChallengeNotFoundError();
+  if (authChallenge === null || authChallenge instanceof Error) {
+    return new AuthChallengeNotFoundError(authChallenge);
   }
   const gallogPosts = await getGallogPosts({ identificationCode });
 
@@ -35,7 +37,7 @@ export default async function connectAccount(
     return new PostNotFoundError();
   }
 
-  await connectDcinsideAccount(context, {
+  return await connectDcinsideAccount(context, {
     riotSub,
     dcinsideIdentificationCode: identificationCode,
   });
@@ -44,6 +46,13 @@ export default async function connectAccount(
 class AuthChallengeNotFoundError extends Error implements BaseError {
   code = 'AUTH_CHALLENGE_NOT_FOUND';
   message = 'auth challenge not found';
+
+  constructor(cause: Error | null) {
+    super();
+    if (cause) {
+      this.message += `: ${cause.message}`;
+    }
+  }
 }
 
 class PostNotFoundError extends Error implements BaseError {

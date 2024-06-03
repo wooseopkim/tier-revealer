@@ -5,5 +5,9 @@ interface Params {
 }
 
 export default async function getAuthChallenge({ namespace }: KVContext, { riotSub }: Params) {
-  return await namespace.get(riotSub);
+  try {
+    return await namespace.get(riotSub);
+  } catch (e: unknown) {
+    return e as Error;
+  }
 }

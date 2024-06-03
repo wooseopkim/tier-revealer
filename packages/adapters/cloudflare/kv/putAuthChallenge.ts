@@ -9,5 +9,9 @@ export default async function putAuthChallenge(
   { namespace }: KVContext,
   { riotSub, challenge }: Params,
 ) {
-  await namespace.put(riotSub, challenge, { expirationTtl: 120 });
+  try {
+    return await namespace.put(riotSub, challenge, { expirationTtl: 120 });
+  } catch (e: unknown) {
+    return e as Error;
+  }
 }

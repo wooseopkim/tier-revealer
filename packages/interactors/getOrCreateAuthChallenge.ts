@@ -15,9 +15,15 @@ export default async function getOrCreateAuthChallenge(context: Context, { riotI
   const riotSub = claims.sub!;
 
   const challenge = await getStoredAuthChallenge(context, { riotSub });
+  if (challenge instanceof Error) {
+    return challenge;
+  }
   if (challenge === null) {
     const created = createAuthChallenge();
-    await putAuthChallenge(context, { riotSub, challenge: created });
+    const result = await putAuthChallenge(context, { riotSub, challenge: created });
+    if (result instanceof Error) {
+      return result;
+    }
     return created;
   }
   return challenge;
