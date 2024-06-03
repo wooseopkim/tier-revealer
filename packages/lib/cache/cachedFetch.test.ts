@@ -1,6 +1,8 @@
+import assert from 'node:assert';
+import { beforeEach, describe, it, mock, type Mock } from 'node:test';
 import cachedFetch from './cachedFetch';
 
-describe(cachedFetch, () => {
+describe(cachedFetch.name, () => {
   const params = [[{ name: 'foo' }, { ttl: 10 }], [{ url: '/foo', ttl: 20 }]] as Parameters<
     typeof cachedFetch
   >[];
@@ -8,11 +10,11 @@ describe(cachedFetch, () => {
   let cache: Partial<Cache>;
 
   beforeEach(() => {
-    jest.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response());
+    mock.method(globalThis, 'fetch', async () => new Response());
 
     cache = {
-      match: jest.fn(async () => undefined),
-      put: jest.fn(async () => {}),
+      match: mock.fn(async () => undefined),
+      put: mock.fn(async () => {}),
     };
     const caches: Partial<CacheStorage> = {
       async open() {
@@ -22,102 +24,121 @@ describe(cachedFetch, () => {
     globalThis['caches'] = caches as CacheStorage;
   });
 
-  it.each(params)('caches responses', async (...args) => {
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`caches responses (${JSON.stringify(args)})`, async () => {
+      const fetch = cachedFetch(...args);
 
-    await fetch('https://example.com');
+      await fetch('https://example.com');
 
-    const req = (cache.put as jest.MockedFunction<(typeof Cache)['prototype']['put']>).mock
-      .calls[0][0] as Request;
-    expect(req.url).toBe('https://example.com/');
-  });
+      const req = (cache.put as Mock<(typeof Cache)['prototype']['put']>).mock.calls[0]
+        .arguments[0] as Request;
+      assert.strictEqual(req.url, 'https://example.com/');
+    }),
+  );
 
-  it.each(params)('does not cache errors', async (...args) => {
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`does not cache errors (${JSON.stringify(args)})`, async () => {
+      const fetch = cachedFetch(...args);
 
-    jest
-      .spyOn(globalThis, 'fetch')
-      .mockImplementation(async () => new Response('', { status: 500 }));
-    await fetch('https://example.com');
+      mock.method(globalThis, 'fetch', async () => new Response('', { status: 500 }));
+      await fetch('https://example.com');
 
-    expect(cache.put).not.toHaveBeenCalled();
-  });
+      assert.strictEqual((cache.put as Mock<Cache['put']>).mock.callCount(), 0);
+    }),
+  );
 
-  it.each(params)('does not cache POST responses', async (...args) => {
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`does not cache POST responses (${JSON.stringify(args)})`, async () => {
+      const fetch = cachedFetch(...args);
 
-    await fetch('https://example.com', { method: 'POST' });
+      await fetch('https://example.com', { method: 'POST' });
 
-    expect(cache.match).not.toHaveBeenCalled();
-    expect(cache.put).not.toHaveBeenCalled();
-  });
+      assert.strictEqual((cache.put as Mock<Cache['put']>).mock.callCount(), 0);
+      assert.strictEqual((cache.match as Mock<Cache['match']>).mock.callCount(), 0);
+    }),
+  );
 
-  it.each(params)('returns cached response if any', async (...args) => {
-    const cached = new Response();
-    jest.spyOn(cache, 'match').mockImplementation(async () => cached);
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`returns cached response if any (${JSON.stringify(args)})`, async () => {
+      const cached = new Response();
+      mock.method(cache as Cache, 'match', async () => cached);
+      const fetch = cachedFetch(...args);
 
-    const res = await fetch('https://example.com');
+      const res = await fetch('https://example.com');
 
-    expect(res).toBe(cached);
-  });
+      assert.strictEqual(res, cached);
+    }),
+  );
 
-  it.each(params)('sets Cache-Control header if none', async (...args) => {
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`sets Cache-Control header if none (${JSON.stringify(args)})`, async () => {
+      const fetch = cachedFetch(...args);
 
-    const res = await fetch('https://example.com');
+      const res = await fetch('https://example.com');
 
-    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
-    expect(res.headers.get('Cache-Control')).toBe(`max-age: ${ttl}`);
-  });
+      const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
+      assert.strictEqual(res.headers.get('Cache-Control'), `max-age: ${ttl}`);
+    }),
+  );
 
-  it.each(params)('sets Cache-Control header if none', async (...args) => {
-    jest
-      .spyOn(globalThis, 'fetch')
-      .mockImplementation(
+  params.forEach((args) =>
+    it(`sets Cache-Control header if none (${JSON.stringify(args)})`, async () => {
+      mock.method(
+        globalThis,
+        'fetch',
         async () => new Response('', { headers: { 'Cache-Control': 'max-age: 1234' } }),
       );
-    const fetch = cachedFetch(...args);
+      const fetch = cachedFetch(...args);
 
-    const res = await fetch('https://example.com');
+      const res = await fetch('https://example.com');
 
-    const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
-    expect(res.headers.get('Cache-Control')).not.toBe(`max-age: ${ttl}`);
-    expect(res.headers.get('Cache-Control')).toBe('max-age: 1234');
-  });
+      const ttl = 'ttl' in args[0] ? args[0].ttl : (args as { ttl: number }[])[1]!.ttl;
+      assert.notStrictEqual(res.headers.get('Cache-Control'), `max-age: ${ttl}`);
+      assert.strictEqual(res.headers.get('Cache-Control'), 'max-age: 1234');
+    }),
+  );
 
-  it.each(params)('caches each request with different headers', async (...args) => {
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`caches each request with different headers (${JSON.stringify(args)})`, async () => {
+      const fetch = cachedFetch(...args);
 
-    jest.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('1'));
-    const first = await fetch('https://example.com', {
-      headers: {
-        'X-Foo': 'Bar',
-      },
-    });
-    jest.spyOn(globalThis, 'fetch').mockImplementation(async () => new Response('2'));
-    const second = await fetch('https://example.com', {
-      headers: {
-        'X-Foo': 'Baz',
-      },
-    });
+      mock.method(globalThis, 'fetch', async () => new Response('1'));
+      const first = await fetch('https://example.com', {
+        headers: {
+          'X-Foo': 'Bar',
+        },
+      });
+      mock.method(globalThis, 'fetch', async () => new Response('2'));
+      const second = await fetch('https://example.com', {
+        headers: {
+          'X-Foo': 'Baz',
+        },
+      });
 
-    const a = (cache.put as jest.MockedFunction<(typeof Cache)['prototype']['put']>).mock
-      .calls[0][0] as Request;
-    const b = (cache.put as jest.MockedFunction<(typeof Cache)['prototype']['put']>).mock
-      .calls[1][0] as Request;
-    expect(a.headers).not.toEqual(b.headers);
-    expect(await first.text()).not.toEqual(await second.text());
-  });
+      const a = (cache.put as Mock<(typeof Cache)['prototype']['put']>).mock.calls[0]
+        .arguments[0] as Request;
+      const b = (cache.put as Mock<(typeof Cache)['prototype']['put']>).mock.calls[1]
+        .arguments[0] as Request;
+      assert.notDeepStrictEqual(a.headers, b.headers);
+      assert.notStrictEqual(await first.text(), await second.text());
+    }),
+  );
 
-  it.each(params)('fires fetch when cache missed', async (...args) => {
-    jest.spyOn(globalThis, 'fetch');
-    const fetch = cachedFetch(...args);
+  params.forEach((args) =>
+    it(`fires fetch when cache missed (${JSON.stringify(args)})`, async () => {
+      mock.method(globalThis, 'fetch');
+      const fetch = cachedFetch(...args);
 
-    await fetch('https://example.com');
+      await fetch('https://example.com');
 
-    expect(globalThis.fetch).toHaveBeenCalledWith(expect.any(Request));
-    const req = (globalThis.fetch as jest.MockedFunction<typeof fetch>).mock.calls[0][0] as Request;
-    expect(req.url).toBe('https://example.com/');
-  });
+      assert.strictEqual(
+        Object.getPrototypeOf(
+          (globalThis.fetch as Mock<typeof fetch>).mock.calls[0].arguments[0] as object,
+        ),
+        Request.prototype,
+      );
+      const req = (globalThis.fetch as Mock<typeof fetch>).mock.calls[0].arguments[0] as Request;
+      assert.strictEqual(req.url, 'https://example.com/');
+    }),
+  );
 });
