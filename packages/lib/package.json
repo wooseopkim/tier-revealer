@@ -3,10 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "tsx --test ./**/*.test.*"
+    "test": "tsx --test ./**/*.test.*",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write . && eslint . --fix",
+    "check": "tsc && :"
   },
   "devDependencies": {
-    "tsx": "^4.11.2",
-    "typescript": "^5.4.5"
+    "tsx": "^4.11.2"
+  },
+  "lint-staged": {
+    "**/*.{ts,js,mjs,cjs}": [
+      "npm run format",
+      "npm run check",
+      "npm run test"
+    ]
   }
 }

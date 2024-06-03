@@ -4,5 +4,11 @@
   ],
   "files": [
     "../../apps/web/.svelte-kit/ambient.d.ts"
-  ]
+  ],
+  "include": [
+    "**/*.ts"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
 }

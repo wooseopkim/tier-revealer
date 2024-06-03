@@ -26,13 +26,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "lint-staged": {
-    "apps/web/**/*.{svelte,ts,js,mjs,cjs}": [
-      "npm run format --workspace=web"
-    ],
-    "apps/web/**/*.svelte": [
-      "npm run check --workspace=web"
-    ]
-  }
+  ]
 }

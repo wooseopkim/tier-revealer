@@ -1,23 +1,21 @@
+import assert from 'node:assert';
 import fs from 'node:fs';
 import path from 'node:path';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, it, mock } from 'node:test';
 import getGallogPosts from './getGallogPosts';
 
-describe(getGallogPosts, () => {
+describe(getGallogPosts.name, () => {
   beforeEach(() => {
     const html = fs.readFileSync(
       path.resolve(path.dirname(import.meta.url.replace(/^file:/, '')), 'gallog.testdata.html'),
     );
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() => new Response(html)),
-    );
+    mock.method(globalThis, 'fetch', () => new Response(html));
   });
 
   it('fetches content', async () => {
     const res = await getGallogPosts({ identificationCode: '' });
 
-    expect(res).toEqual([
+    assert.deepStrictEqual(res, [
       {
         galleryId: 'lolpet',
         galleryName: '전설이(롤토체스)',

@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test": "tsx --test ./**/*.test.*",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write . && eslint . --fix",
+    "check": "tsc && :"
   },
   "dependencies": {
     "@tier-revealer/lib": "file:../lib",
@@ -11,5 +15,12 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240512.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,js,mjs,cjs}": [
+      "npm run format",
+      "npm run check",
+      "npm run test"
+    ]
   }
 }
