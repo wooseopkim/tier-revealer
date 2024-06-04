@@ -1,12 +1,12 @@
 import { type KVContext } from './KVContext';
 
 interface Params {
-  riotSub: string;
+  puuid: string;
 }
 
-export default async function getAuthChallenge({ namespace }: KVContext, { riotSub }: Params) {
+export default async function getAuthChallenge({ namespace }: KVContext, { puuid }: Params) {
   try {
-    return await namespace.get(riotSub);
+    return await namespace.get(puuid);
   } catch (e: unknown) {
     return e as Error;
   }

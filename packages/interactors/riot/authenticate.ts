@@ -32,11 +32,11 @@ export default async function authenticate(context: Context, { code }: Params) {
 
   const challenge = createAuthChallenge();
 
-  const riotSub = claims.sub!;
+  const puuid = claims.sub!;
   const results = await Promise.all([
     updateMe(context, { accessToken: payload.access_token }),
     putRiotTokens({ namespace: riotTokensNamespace }, { payload }),
-    putAuthChallenge({ namespace: authChallengeNamespace }, { riotSub, challenge }),
+    putAuthChallenge({ namespace: authChallengeNamespace }, { puuid, challenge }),
   ]);
 
   const error = results.find((x) => x instanceof Error);

@@ -14,9 +14,9 @@ interface Params {
 
 export default async function verifyAndUpdateMe(context: Context, { idToken }: Params) {
   const { payload: claims } = await verifyToken({ token: idToken });
-  const riotSub = claims.sub!;
+  const puuid = claims.sub!;
 
-  const payload = await getRiotTokens(context, { riotSub });
+  const payload = await getRiotTokens(context, { puuid });
   if (payload === null || payload instanceof Error) {
     return new TokensNotFoundError(payload);
   }
@@ -28,7 +28,7 @@ export default async function verifyAndUpdateMe(context: Context, { idToken }: P
   }
   const { account, leagueEntries } = me;
 
-  const connections = await getAccountConnections(context, { riotSub });
+  const connections = await getAccountConnections(context, { puuid });
   if (connections instanceof Error) {
     return connections;
   }

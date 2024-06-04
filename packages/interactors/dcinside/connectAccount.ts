@@ -19,10 +19,10 @@ export default async function connectAccount(
   { riotIdToken, identificationCode }: Params,
 ) {
   const { payload: claims } = await verifyToken({ token: riotIdToken });
-  const riotSub = claims.sub!;
+  const puuid = claims.sub!;
 
   const authChallenge = await getAuthChallenge(context, {
-    riotSub,
+    puuid,
   });
   if (authChallenge === null || authChallenge instanceof Error) {
     return new AuthChallengeNotFoundError(authChallenge);
@@ -38,7 +38,7 @@ export default async function connectAccount(
   }
 
   return await connectDcinsideAccount(context, {
-    riotSub,
+    puuid,
     dcinsideIdentificationCode: identificationCode,
   });
 }

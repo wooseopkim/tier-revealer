@@ -12,15 +12,15 @@ interface Params {
 
 export default async function getOrCreateAuthChallenge(context: Context, { riotIdToken }: Params) {
   const { payload: claims } = await verifyToken({ token: riotIdToken });
-  const riotSub = claims.sub!;
+  const puuid = claims.sub!;
 
-  const challenge = await getStoredAuthChallenge(context, { riotSub });
+  const challenge = await getStoredAuthChallenge(context, { puuid });
   if (challenge instanceof Error) {
     return challenge;
   }
   if (challenge === null) {
     const created = createAuthChallenge();
-    const result = await putAuthChallenge(context, { riotSub, challenge: created });
+    const result = await putAuthChallenge(context, { puuid, challenge: created });
     if (result instanceof Error) {
       return result;
     }
