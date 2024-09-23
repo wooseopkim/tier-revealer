@@ -1,13 +1,7 @@
 {
-  "extends": [
-    "../../tsconfig.json"
-  ],
-  "files": [
-    "../../apps/web/.svelte-kit/ambient.d.ts"
-  ],
-  "include": [
-    "**/*.ts"
-  ],
+  "extends": ["../../tsconfig.json"],
+  "files": ["../../apps/web/.svelte-kit/ambient.d.ts"],
+  "include": ["**/*.ts"],
   "compilerOptions": {
     "noEmit": true
   }
