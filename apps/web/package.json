@@ -40,14 +40,5 @@
   },
   "dependencies": {
     "@tier-revealer/interactors": "file:../../packages/interactors"
-  },
-  "lint-staged": {
-    "**/*.{svelte,ts,js,mjs,cjs}": [
-      "npm run format",
-      "npm run test -- --run"
-    ],
-    "**/*.svelte": [
-      "npm run check"
-    ]
   }
 }

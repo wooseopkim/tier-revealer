@@ -10,12 +10,5 @@
   },
   "devDependencies": {
     "tsx": "^4.11.2"
-  },
-  "lint-staged": {
-    "**/*.{ts,js,mjs,cjs}": [
-      "npm run format",
-      "npm run check",
-      "npm run test"
-    ]
   }
 }
