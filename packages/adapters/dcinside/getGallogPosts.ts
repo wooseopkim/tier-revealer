@@ -30,7 +30,6 @@ export default async function getGallogPosts({ identificationCode }: Params) {
         HH: 0,
         ii: 0,
         ss: 0,
-        timeZone: 'Asia/Seoul',
       });
 
       return { galleryName, galleryId, postTitle, date };

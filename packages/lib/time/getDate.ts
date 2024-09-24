@@ -5,10 +5,9 @@ interface Params {
   HH: number;
   ii: number;
   ss: number;
-  timeZone: string;
 }
 
-export default function getDate({ yyyy, MM, dd, HH, ii, ss, timeZone }: Params) {
+export default function getDate({ yyyy, MM, dd, HH, ii, ss }: Params) {
   const date = new Date();
   date.setFullYear(yyyy);
   date.setMonth(MM - 1);
@@ -16,7 +15,6 @@ export default function getDate({ yyyy, MM, dd, HH, ii, ss, timeZone }: Params) 
   date.setHours(HH);
   date.setMinutes(ii);
   date.setSeconds(ss);
-
-  const timestamp = Date.parse(date.toLocaleString('en-US', { timeZone }));
-  return new Date(timestamp);
+  date.setMilliseconds(0);
+  return date;
 }

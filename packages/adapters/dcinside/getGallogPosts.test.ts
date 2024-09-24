@@ -20,13 +20,13 @@ describe(getGallogPosts.name, () => {
         galleryId: 'lolpet',
         galleryName: '전설이(롤토체스)',
         postTitle: '테스트',
-        date: new Date('2024-05-24T15:00:00Z'),
+        date: new Date(2024, 5 - 1, 25),
       },
       {
         galleryId: 'lolpet',
         galleryName: '전설이(롤토체스)',
         postTitle: '테스트',
-        date: new Date('2024-05-24T15:00:00Z'),
+        date: new Date(2024, 5 - 1, 25),
       },
     ]);
   });
