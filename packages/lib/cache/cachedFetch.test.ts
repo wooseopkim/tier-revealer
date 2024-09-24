@@ -119,7 +119,7 @@ describe(cachedFetch.name, () => {
         .arguments[0] as Request;
       const b = (cache.put as Mock<(typeof Cache)['prototype']['put']>).mock.calls[1]
         .arguments[0] as Request;
-      assert.notDeepStrictEqual(a.headers, b.headers);
+      assert.notDeepStrictEqual(new Map(a.headers.entries()), new Map(b.headers.entries()));
       assert.notStrictEqual(await first.text(), await second.text());
     }),
   );
