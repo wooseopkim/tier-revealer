@@ -28,7 +28,6 @@ export default async function getGuestbookComments({ identificationCode }: Param
         HH: parseInt(HH, 10) || 23,
         ii: parseInt(ii, 10) || 59,
         ss: parseInt(ss, 10) || 59,
-        timeZone: 'Asia/Seoul',
       });
 
       const content = $('.memo').text();
